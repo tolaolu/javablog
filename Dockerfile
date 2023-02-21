@@ -1,5 +1,12 @@
 FROM openjdk:17-jdk-slim
 EXPOSE 8080
-COPY target/spring-boot-blog-app.jar spring-boot-blog-app.jar
-ENTRYPOINT ["java","-jar","/spring-boot-blog-app.jar"]
 
+WORKDIR /app
+
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:resolve
+
+COPY src ./src
+
+CMD ["./mvnw", "spring-boot:run"]
